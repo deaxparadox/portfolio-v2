@@ -2,7 +2,14 @@
 
 ## In Progress
 
-(none)
+- [ ] **Design Language (Milestone 2)** — codify the visual vocabulary
+      that already emerged from Milestone 1 (color tokens, container
+      primitive, shared pill control, motion, content-shaped skeletons).
+      No general-purpose UI kit; no new content.
+      Spec: [docs/specs/0002-design-language.md](docs/specs/0002-design-language.md)
+      ADR: [0003-design-token-vocabulary](docs/adrs/0003-design-token-vocabulary.md)
+      Branch: `feat/design-language`
+      Status: spec written, awaiting approval to implement.
 
 ## Done
 
