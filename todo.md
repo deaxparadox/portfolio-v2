@@ -2,7 +2,17 @@
 
 ## In Progress
 
-(none)
+- [ ] **Floating Shell Redesign (Milestone 4)** — restyles the shell from
+      flush/bordered "OS-window-manager" chrome to a floating-widget
+      visual language (Spotify/LinkedIn-referenced); extracts Navbar
+      into its own floating container; replaces the navbar-embedded
+      assistant toggle with a universal floating trigger button (FAB)
+      plus 5-minute idle-nudge behavior. Reorders the roadmap — this is
+      now Milestone 4, pushing "Featured Module" to Milestone 5.
+      Spec: [docs/specs/0004-floating-shell-redesign.md](docs/specs/0004-floating-shell-redesign.md)
+      ADR: [0005-floating-container-shell](docs/adrs/0005-floating-container-shell.md)
+      Branch: `feat/floating-shell`
+      Status: spec written, awaiting approval to implement.
 
 ## Done
 
