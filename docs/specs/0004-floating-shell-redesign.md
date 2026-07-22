@@ -1,6 +1,6 @@
 # Spec 0004: Floating Shell Redesign (Milestone 4)
 
-Status: Awaiting approval
+Status: Implemented
 Branch: `feat/floating-shell` off `main`
 Depends on: [ADR-0005](../adrs/0005-floating-container-shell.md)
 

@@ -4,6 +4,7 @@ import { createContext, useContext, useReducer, type ReactNode } from "react";
 
 type WorkspaceState = {
   companionOpen: boolean;
+  hasEverOpenedCompanion: boolean;
 };
 
 type WorkspaceAction =
@@ -17,11 +18,16 @@ function workspaceReducer(
 ): WorkspaceState {
   switch (action.type) {
     case "OPEN_COMPANION":
-      return { ...state, companionOpen: true };
+      return { ...state, companionOpen: true, hasEverOpenedCompanion: true };
     case "CLOSE_COMPANION":
       return { ...state, companionOpen: false };
     case "TOGGLE_COMPANION":
-      return { ...state, companionOpen: !state.companionOpen };
+      return {
+        ...state,
+        companionOpen: !state.companionOpen,
+        hasEverOpenedCompanion:
+          state.hasEverOpenedCompanion || !state.companionOpen,
+      };
   }
 }
 
@@ -33,6 +39,7 @@ const WorkspaceDispatchContext = createContext<React.Dispatch<WorkspaceAction> |
 export function WorkspaceProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(workspaceReducer, {
     companionOpen: false,
+    hasEverOpenedCompanion: false,
   });
 
   return (

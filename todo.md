@@ -2,19 +2,31 @@
 
 ## In Progress
 
-- [ ] **Floating Shell Redesign (Milestone 4)** — restyles the shell from
+(none)
+
+## Done
+
+- [x] **Floating Shell Redesign (Milestone 4)** — restyled the shell from
       flush/bordered "OS-window-manager" chrome to a floating-widget
-      visual language (Spotify/LinkedIn-referenced); extracts Navbar
-      into its own floating container; replaces the navbar-embedded
+      visual language (Spotify/LinkedIn-referenced); extracted Navbar
+      into its own floating container; replaced the navbar-embedded
       assistant toggle with a universal floating trigger button (FAB)
-      plus 5-minute idle-nudge behavior. Reorders the roadmap — this is
-      now Milestone 4, pushing "Featured Module" to Milestone 5.
+      plus 5-minute idle-nudge behavior (stops recurring after first
+      real open). Reorders the roadmap — this is now Milestone 4,
+      pushing "Featured Module" to Milestone 5.
+      Found and fixed a real focus-management gap during verification:
+      opening Deax moved focus nowhere (fell to `<body>`) because the
+      trigger unmounts on click; closing it did the same. Both now move
+      focus deliberately (into the panel on open, back to the trigger
+      on close, but never stealing focus on initial page load).
       Spec: [docs/specs/0004-floating-shell-redesign.md](docs/specs/0004-floating-shell-redesign.md)
       ADR: [0005-floating-container-shell](docs/adrs/0005-floating-container-shell.md)
       Branch: `feat/floating-shell`
-      Status: spec written, awaiting approval to implement.
-
-## Done
+      Verified: `pnpm build`/`pnpm lint` clean; Playwright check confirmed
+      floating chrome at all three breakpoints, Spotify-style docking
+      (Workspace resizes, never overlapped), idle-nudge firing after a
+      simulated 6 minutes and not recurring after first open, and both
+      focus-management fixes. No console errors.
 
 - [x] **Homepage Module (Milestone 3)** — first real content module:
       identity + contact from Master-Resume-Database.md, Featured Work

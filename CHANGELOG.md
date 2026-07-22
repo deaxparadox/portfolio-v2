@@ -4,6 +4,22 @@
 
 ### Added
 
+- Floating shell redesign (Milestone 4): restyled the shell from
+  flush/bordered "OS-window-manager" chrome to a floating-widget visual
+  language — Navigation, Workspace, and Companion Workspace each render
+  as separate rounded, shadowed, gapped containers instead of edge-to-edge
+  panels. Navbar is now its own floating container, extracted out of
+  Workspace's render tree. Companion Workspace stays on-demand only,
+  opened via a new universal floating trigger button (present at every
+  breakpoint, replacing the old navbar-embedded toggle), and docks
+  beside Workspace Spotify-style (resizing it) rather than overlaying
+  it. The trigger gets a subtle idle-nudge after 5 minutes of inactivity,
+  which stops recurring once the visitor has opened it once. Fixed two
+  focus-management gaps found during verification: opening/closing the
+  Companion now moves focus deliberately (into the panel, then back to
+  the trigger) instead of losing it to `<body>`.
+  See [docs/specs/0004-floating-shell-redesign.md](docs/specs/0004-floating-shell-redesign.md).
+
 - Homepage module (Milestone 3): first real content on the site.
   `lib/content/` (`profile.ts`, `projects.ts`) sources identity and all
   12 documented projects from the resume database. Homepage renders a

@@ -2,11 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  useWorkspaceDispatch,
-  useWorkspaceState,
-} from "@/lib/workspace/workspace-context";
-import { PillButton } from "@/components/shell/pill-button";
 
 const NAV_ITEMS = [
   { href: "/", label: "Home" },
@@ -20,13 +15,11 @@ const NAV_ITEMS = [
 
 export function Navigation() {
   const pathname = usePathname();
-  const { companionOpen } = useWorkspaceState();
-  const dispatch = useWorkspaceDispatch();
 
   return (
     <nav
       aria-label="Primary"
-      className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-border bg-background px-6 py-4"
+      className="sticky top-0 z-10 flex items-center gap-4 rounded-2xl border border-border bg-background px-6 py-4 shadow-sm"
     >
       <ul className="flex flex-wrap gap-4">
         {NAV_ITEMS.map((item) => {
@@ -48,12 +41,6 @@ export function Navigation() {
           );
         })}
       </ul>
-      <PillButton
-        onClick={() => dispatch({ type: "TOGGLE_COMPANION" })}
-        aria-pressed={companionOpen}
-      >
-        {companionOpen ? "Close Assistant" : "Ask Deax"}
-      </PillButton>
     </nav>
   );
 }
