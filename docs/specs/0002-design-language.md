@@ -1,6 +1,6 @@
 # Spec 0002: Design Language (Milestone 2)
 
-Status: Awaiting approval
+Status: Implemented
 Branch: `feat/design-language` off `main`
 Depends on: [ADR-0003](../adrs/0003-design-token-vocabulary.md)
 

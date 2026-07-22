@@ -9,25 +9,29 @@ export function CompanionWorkspace() {
   const { companionOpen } = useWorkspaceState();
   const dispatch = useWorkspaceDispatch();
 
-  if (!companionOpen) return null;
-
   return (
     <div
       role="complementary"
       aria-label="Deax Assistant"
-      className="fixed inset-x-0 bottom-0 z-20 max-h-[70dvh] overflow-y-auto rounded-t-2xl border-t border-black/10 bg-background shadow-xl md:inset-x-auto md:inset-y-0 md:right-0 md:max-h-none md:w-[360px] md:rounded-t-none md:rounded-l-2xl md:border-l md:border-t-0 lg:static lg:h-full lg:w-[380px] lg:flex-shrink-0 lg:rounded-none lg:border-l lg:border-t-0 lg:shadow-none dark:border-white/10"
+      aria-hidden={!companionOpen}
+      inert={!companionOpen}
+      className={`fixed inset-x-0 bottom-0 z-20 max-h-[70dvh] overflow-y-auto rounded-t-2xl border-t border-border bg-background shadow-xl transition-[transform,width] duration-200 ease-out md:inset-x-auto md:inset-y-0 md:right-0 md:max-h-none md:w-[360px] md:rounded-t-none md:rounded-l-2xl md:border-l md:border-t-0 lg:static lg:h-full lg:flex-shrink-0 lg:translate-x-0 lg:translate-y-0 lg:rounded-none lg:border-l lg:border-t-0 lg:shadow-none ${
+        companionOpen
+          ? "translate-y-0 md:translate-x-0 md:translate-y-0 lg:w-[380px]"
+          : "translate-y-full md:translate-x-full md:translate-y-0 lg:w-0 lg:overflow-hidden lg:border-l-0"
+      }`}
     >
-      <div className="flex items-center justify-between border-b border-black/10 p-4 dark:border-white/10">
+      <div className="flex items-center justify-between border-b border-border p-4">
         <span className="text-sm font-semibold">Deax</span>
         <button
           type="button"
           onClick={() => dispatch({ type: "CLOSE_COMPANION" })}
-          className="text-sm text-foreground/60 hover:text-foreground"
+          className="text-sm text-muted-foreground hover:text-foreground"
         >
           Close
         </button>
       </div>
-      <div className="p-4 text-sm text-foreground/60">
+      <div className="p-4 text-sm text-muted-foreground">
         Assistant placeholder — chat and voice arrive in a later milestone.
       </div>
     </div>

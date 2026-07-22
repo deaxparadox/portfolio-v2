@@ -6,6 +6,7 @@ import {
   useWorkspaceDispatch,
   useWorkspaceState,
 } from "@/lib/workspace/workspace-context";
+import { PillButton } from "@/components/shell/pill-button";
 
 const NAV_ITEMS = [
   { href: "/", label: "Home" },
@@ -25,7 +26,7 @@ export function Navigation() {
   return (
     <nav
       aria-label="Primary"
-      className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-black/10 bg-background px-6 py-4 dark:border-white/10"
+      className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-border bg-background px-6 py-4"
     >
       <ul className="flex flex-wrap gap-4">
         {NAV_ITEMS.map((item) => {
@@ -38,7 +39,7 @@ export function Navigation() {
                 className={
                   isActive
                     ? "text-sm font-medium text-foreground"
-                    : "text-sm font-medium text-foreground/60 transition-colors hover:text-foreground"
+                    : "text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
                 }
               >
                 {item.label}
@@ -47,14 +48,12 @@ export function Navigation() {
           );
         })}
       </ul>
-      <button
-        type="button"
+      <PillButton
         onClick={() => dispatch({ type: "TOGGLE_COMPANION" })}
         aria-pressed={companionOpen}
-        className="rounded-full border border-black/10 px-4 py-2 text-sm font-medium transition-colors hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5"
       >
         {companionOpen ? "Close Assistant" : "Ask Deax"}
-      </button>
+      </PillButton>
     </nav>
   );
 }

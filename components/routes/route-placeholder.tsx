@@ -1,3 +1,5 @@
+import { RouteContainer } from "@/components/routes/route-container";
+
 export function RoutePlaceholder({
   title,
   description,
@@ -6,9 +8,9 @@ export function RoutePlaceholder({
   description: string;
 }) {
   return (
-    <div className="mx-auto max-w-2xl px-6 py-16">
+    <RouteContainer>
       <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
-      <p className="mt-2 text-sm text-foreground/60">{description}</p>
-    </div>
+      <p className="mt-2 text-sm text-muted-foreground">{description}</p>
+    </RouteContainer>
   );
 }
