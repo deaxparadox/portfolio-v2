@@ -1,6 +1,6 @@
 # Spec 0001: Application Shell (Milestone 1)
 
-Status: Awaiting approval
+Status: Implemented
 Branch: `feat/application-shell` off `main`
 Depends on: [ADR-0001](../adrs/0001-technology-stack.md), [ADR-0002](../adrs/0002-workspace-architecture-and-scroll-strategy.md)
 
