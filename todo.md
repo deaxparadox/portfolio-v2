@@ -2,7 +2,16 @@
 
 ## In Progress
 
-(none)
+- [ ] **Homepage Module (Milestone 3)** — first real content module:
+      identity + contact from Master-Resume-Database.md, Featured Work
+      card (HireIQ), and the dashboard card grid (Experience, Projects,
+      Engineering, Resume, Contact, Assistant). Contact page gets real
+      content; other route pages stay placeholders pending their own
+      module milestones.
+      Spec: [docs/specs/0003-homepage-module.md](docs/specs/0003-homepage-module.md)
+      ADR: [0004-content-data-modules](docs/adrs/0004-content-data-modules.md)
+      Branch: `feat/homepage-module`
+      Status: spec written, awaiting approval to implement.
 
 ## Done
 
