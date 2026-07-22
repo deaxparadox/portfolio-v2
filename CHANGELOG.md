@@ -4,6 +4,21 @@
 
 ### Added
 
+- Homepage module (Milestone 3): first real content on the site.
+  `lib/content/` (`profile.ts`, `projects.ts`) sources identity and all
+  12 documented projects from the resume database. Homepage renders a
+  real intro, a Featured Work callout (HireIQ, linking to its live
+  GitHub repo), and a dashboard card grid (Experience, Resume,
+  Engineering, Projects, Contact, Assistant — the last opening the
+  Companion Workspace directly via workspace state, no routing).
+  `/contact` gets real email/LinkedIn/GitHub links; other routes stay
+  placeholders pending their own module milestones. Widened the shared
+  `RouteContainer` from `max-w-2xl` to `max-w-4xl` now that a real
+  2-column grid exists to size it against. New components live under
+  `components/modules/`, not `components/home/`, so they don't assume
+  where they're rendered.
+  See [docs/specs/0003-homepage-module.md](docs/specs/0003-homepage-module.md).
+
 - Design language (Milestone 2): `--color-border` and
   `--color-muted-foreground` tokens (derived from `--foreground` via
   `color-mix()`, so they stay correct in both themes automatically),

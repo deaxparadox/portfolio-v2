@@ -2,18 +2,28 @@
 
 ## In Progress
 
-- [ ] **Homepage Module (Milestone 3)** — first real content module:
+(none)
+
+## Done
+
+- [x] **Homepage Module (Milestone 3)** — first real content module:
       identity + contact from Master-Resume-Database.md, Featured Work
       card (HireIQ), and the dashboard card grid (Experience, Projects,
-      Engineering, Resume, Contact, Assistant). Contact page gets real
+      Engineering, Resume, Contact, Assistant). Contact page has real
       content; other route pages stay placeholders pending their own
-      module milestones.
+      module milestones. Widened `RouteContainer` to `max-w-4xl` once
+      the 2-column card grid showed `max-w-2xl` was too narrow —
+      exactly the revisit Milestone 2 flagged as pending real content.
+      Components live under `components/modules/`, not `components/home/`,
+      per "modules never assume where they're rendered."
       Spec: [docs/specs/0003-homepage-module.md](docs/specs/0003-homepage-module.md)
       ADR: [0004-content-data-modules](docs/adrs/0004-content-data-modules.md)
       Branch: `feat/homepage-module`
-      Status: spec written, awaiting approval to implement.
-
-## Done
+      Verified: `pnpm build`/`pnpm lint` clean; Playwright check confirmed
+      card layout at all three breakpoints, Assistant card opens the
+      Companion without navigating, Experience card navigates correctly,
+      and /contact renders the real email/LinkedIn/GitHub links. No
+      console errors.
 
 - [x] **Design Language (Milestone 2)** — codified the visual vocabulary
       that emerged from Milestone 1 (two color tokens derived via

@@ -1,8 +1,27 @@
 # Spec 0003: Homepage Module (Milestone 3)
 
-Status: Awaiting approval
+Status: Implemented
 Branch: `feat/homepage-module` off `main`
 Depends on: [ADR-0004](../adrs/0004-content-data-modules.md)
+
+## Resolved during review
+
+Two questions came up reviewing `docs/context/` (a set of notes from
+design discussions held outside this tool, not fully transcribed except
+for `design-workshop-notes.md`):
+
+- **Homepage shape:** those notes raised a tension between a literal
+  card-grid dashboard and a more "exploration-first" framing. Resolved:
+  the dashboard/lobby (this spec, as originally written) is correct for
+  Milestone 3. Any hero/reveal/story-first mechanic, and a
+  previously-discussed but never-finalized idle-lock-screen concept,
+  were confirmed as out of scope here — deferred, not rejected, and not
+  something this milestone's architecture needs to design around, since
+  an intro layer (if it happens) would live entirely inside `app/page.tsx`
+  and wouldn't touch the shared shell.
+- **Component location:** renamed from `components/home/` to
+  `components/modules/` throughout this spec, per "modules never assume
+  where they are rendered" (Bible 0.5 §7, `docs/context/04-module-language.md`).
 
 ## What's being built
 
@@ -79,12 +98,12 @@ deeper, dedicated module work.
 
 ## Components
 
-- `components/home/dashboard-card.tsx` — the shared card shell (title,
+- `components/modules/dashboard-card.tsx` — the shared card shell (title,
   description, `href` or `onClick`). Seven real call sites in this one
   module justify it now, unlike the shell-only components in Milestone
   2 — this is exactly the point at which a primitive stops being
   speculative.
-- `components/home/featured-work-card.tsx` — visually distinct
+- `components/modules/featured-work-card.tsx` — visually distinct
   (full-width, larger heading per the Bible's wireframe), built on top
   of the same underlying styles as `DashboardCard`.
 - `app/page.tsx` — composes profile intro + `FeaturedWorkCard` +

@@ -1,5 +1,5 @@
-import { RouteSkeleton } from "@/components/routes/route-skeleton";
+import { HomeSkeleton } from "@/components/modules/home-skeleton";
 
 export default function Loading() {
-  return <RouteSkeleton />;
+  return <HomeSkeleton />;
 }
