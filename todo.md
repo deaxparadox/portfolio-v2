@@ -6,6 +6,35 @@
 
 ## Done
 
+- [x] **Migrate remaining 8 projects to base Case File shape** — Staffmind,
+      StructureIQ, Founder's Lab, CourseForge, LexCall, InterviewPrep,
+      Deskmind, EcosystemAI migrated from the legacy `Project` shape in
+      `lib/content/projects.ts` (now deleted) into the same `CaseFile`
+      type the 4 anchors use — structural fields only
+      (question/context/ownership/status/hasOpenRisk/outcome/principles/
+      artifacts), no invented Investigations/Decision Records/Notes, per
+      ADR-0007's "depth is a property of the object, not a different
+      schema." All facts re-verified directly against
+      `Master-Resume-Database.md` this session rather than recalled,
+      including two projects flagged as uncertain going in (Founder's
+      Lab's ownership scope, CourseForge's current status). First real
+      uses of `ownership: "inherited"` (CourseForge), `status:
+      "production"` (LexCall), and `status: "dormant"` (StructureIQ,
+      Deskmind) — enum values that existed in the type but were unused
+      until now. All 12 project slugs now resolve to real Case File
+      content via the existing `getCaseFile()` lookup; no routing changes
+      needed.
+      Spec: [docs/specs/0005-remaining-case-files-migration.md](docs/specs/0005-remaining-case-files-migration.md)
+      ADR: [0007-presentation-system](docs/adrs/0007-presentation-system.md)
+      Branch: `feat/case-files-migration`
+      Verified: `pnpm build`/`pnpm lint` clean; dev server check confirmed
+      all 8 newly-migrated `/projects/<slug>` routes return 200 with
+      correct content, including InterviewPrep's empty `artifacts: []`
+      rendering with no broken UI. `grep` confirmed no remaining import
+      of `lib/content/projects.ts` before deletion.
+
+## Done
+
 - [x] **Focus Stage Interaction** — replaced accordion-style expand/collapse
       with fixed-slot promotion: five slot positions (Focus, 2 Medium, 2
       Small) never move or resize; clicking a non-Focus module swaps its

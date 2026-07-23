@@ -1,9 +1,9 @@
 import type { TimelineRecord } from "@/lib/content/types";
 
 /**
- * Only the anchor Case Files (see case-files.ts) are linked here so far.
- * Excellence Technologies spans 12 total engagements; the remaining 8
- * stay in lib/content/projects.ts until they're worth the same depth.
+ * Only the four anchor Case Files are linked here so far. Excellence
+ * Technologies spans all 12 engagements (see case-files.ts), but linking
+ * the remaining 8 is deferred until Timeline is built as a real consumer.
  */
 export const timeline: TimelineRecord[] = [
   {

@@ -4,6 +4,26 @@
 
 ### Added
 
+- Remaining Case Files migration: Staffmind, StructureIQ, Founder's Lab,
+  CourseForge, LexCall, InterviewPrep, Deskmind, and EcosystemAI moved
+  from the legacy `Project` shape into base-shape `CaseFile` objects —
+  structural fields only, no invented Investigations/Decision
+  Records/Notes, per ADR-0007's "depth is a property of the object, not
+  a different schema." All facts re-verified directly against the
+  resume database this session. `lib/content/projects.ts` removed now
+  that nothing depends on it; all 12 project slugs resolve to real
+  content through the existing `getCaseFile()` lookup with no routing
+  changes.
+  See [docs/specs/0005-remaining-case-files-migration.md](docs/specs/0005-remaining-case-files-migration.md).
+
+- ADR-0007 (Presentation System): formalizes the Knowledge/Presentation/
+  Consumer layering, presentation variants per object, Focus Stage
+  mechanics, state-over-type color, and the two-motion vocabulary
+  (Depth vs. Navigation) — decisions that were already shipped in the
+  workspace homepage but previously lived only in conversation and
+  commit messages.
+  See [docs/adrs/0007-presentation-system.md](docs/adrs/0007-presentation-system.md).
+
 - Focus Stage interaction: replaced accordion expand/collapse with
   fixed-slot promotion — five slots never move or resize, clicking a
   module swaps its content with the Focus slot's via a real FLIP
