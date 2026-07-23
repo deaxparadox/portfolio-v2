@@ -4,6 +4,17 @@
 
 ### Added
 
+- Focus Stage interaction: replaced accordion expand/collapse with
+  fixed-slot promotion — five slots never move or resize, clicking a
+  module swaps its content with the Focus slot's via a real FLIP
+  position animation, reading as "changing focus" rather than "a card
+  got bigger." Fixes the page growing/scrolling as modules were
+  engaged and the collapsed state overflowing the viewport at rest
+  (identity header compacted to two lines). Every module now has
+  distinct Small and Focus presentation forms rather than one
+  stretched into the other. Removed `WorkbenchModule` and
+  `TimelineStrip`, superseded.
+
 - Workspace homepage: replaced the equal-weight card grid with an
   asymmetric, composition-first bento (`WorkbenchModule`) — a Hero
   Investigation, medium Decision Record and Case File preview, and quiet

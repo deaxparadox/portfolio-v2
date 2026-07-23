@@ -6,6 +6,32 @@
 
 ## Done
 
+- [x] **Focus Stage Interaction** — replaced accordion-style expand/collapse
+      with fixed-slot promotion: five slot positions (Focus, 2 Medium, 2
+      Small) never move or resize; clicking a non-Focus module swaps its
+      content with the Focus slot's, animated with a real FLIP position
+      transition (measure-before → re-render → measure-after → animate the
+      delta) so it reads as "changing focus," not "a card got taller."
+      Fixes the two real bugs diagnosed from the previous milestone's
+      screenshots: the page no longer grows/scrolls as modules are
+      engaged (slots are fixed; only occupancy changes), and the
+      collapsed-at-rest state no longer overflows the viewport (identity
+      header compacted to two tight lines, workspace begins immediately).
+      Every module now has two genuinely different presentation forms —
+      Small and Focus — not one stretched into the other; Timeline's
+      Focus form uses its real, previously-unused responsibility bullets
+      rather than padding out empty space.
+      Removed `WorkbenchModule` and `TimelineStrip`, both fully superseded.
+      Prototyped first as a working interactive artifact before writing
+      any real code, per the project's established pattern for
+      interaction-model questions.
+      Branch: `feat/evidence-prototype`
+      Verified: `pnpm build`/`pnpm lint` clean; Playwright confirmed no
+      overflow at rest, correct content swap on promotion (both click and
+      keyboard Enter), clicking the current Focus module is a no-op, and
+      `prefers-reduced-motion` produces an instant swap with correct
+      content instead of an animated one. No console errors.
+
 - [x] **Workspace Homepage** — replaced the equal-weight card grid with a
       composition-first, asymmetric bento: a Hero Investigation (Vocalyst),
       medium Decision Record (BuildConnect's no-API-server architecture) and

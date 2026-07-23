@@ -5,11 +5,13 @@ import { HomeWorkspace } from "@/components/modules/home-workspace";
 export default function Home() {
   return (
     <RouteContainer>
-      <h1 className="text-2xl font-semibold tracking-tight">{profile.name}</h1>
-      <p className="mt-1 text-sm font-medium text-muted-foreground">{profile.title}</p>
-      <p className="mt-4 text-sm text-muted-foreground">{profile.intro}</p>
+      <p className="text-base font-semibold">
+        {profile.name}
+        <span className="font-normal text-muted-foreground"> · {profile.title}</span>
+      </p>
+      <p className="mt-1 text-sm text-muted-foreground">{profile.intro}</p>
 
-      <div className="mt-10">
+      <div className="mt-6">
         <HomeWorkspace />
       </div>
     </RouteContainer>
