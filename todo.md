@@ -6,6 +6,45 @@
 
 ## Done
 
+- [x] **Evidence Model Prototype** — validates the evidence model as a real
+      user-facing experience rather than just data. `/projects/[slug]` now
+      renders a real Case File (question, ownership/status badge, context,
+      related Investigations/Decision Records, outcome, Engineering Notes,
+      verify links) for the four anchors; falls back to the existing
+      placeholder for the other 8, which are deliberately not migrated yet
+      ("smallest convincing set" applied to implementation, not just
+      content). Homepage rewritten around four visitor questions (Can he
+      solve difficult problems? / Can I trust his technical decisions? /
+      What has he actually built? / How does he think?), each linking
+      directly to real evidence instead of a site-navigation card grid.
+      Removed `FeaturedWorkCard`/`AssistantCard` as dead code once the
+      homepage no longer needed them — the Assistant is already reachable
+      via the global floating trigger from Milestone 4.
+      Investigation/DecisionRecord/EngineeringNote view components take
+      the object directly as a prop with no assumption about which page
+      renders them, preserving object independence per the evidence
+      model's own philosophy.
+      ADR: [0006-portfolio-evidence-model](docs/adrs/0006-portfolio-evidence-model.md)
+      Branch: `feat/evidence-prototype`
+      Verified: `pnpm build`/`pnpm lint` clean; Playwright confirmed all
+      four entry points link to real, fully-rendered Case Files, a
+      non-migrated project still shows the honest placeholder, and
+      Vocalyst's page (both an Investigation and a Decision Record) renders
+      every section correctly. No console errors.
+
+- [x] **Portfolio Evidence Model** — foundational data model underneath all
+      future content: Profile, Case File, Investigation, Decision Record,
+      Engineering Note, Timeline Record, Artifact — each defined by the
+      engineering evidence it provides and which of the three principles
+      (Understand/Engineer/Own Reality) it reinforces, not by storage
+      shape. Confidentiality (displayName-only), ownership, and status
+      are schema-enforced fields, not editorial reminders.
+      Implemented `lib/content/types.ts` plus real content for the four
+      "smallest convincing set" anchors (HireIQ, BuildConnect USA,
+      SellerPulse, Vocalyst): 4 Case Files, 2 Investigations, 4 Decision
+      Records, 4 Engineering Notes, 1 Timeline Record — every fact
+      sourced from Master-Resume-Database.md, nothing invented. Deliberately
+
 - [x] **Portfolio Evidence Model** — foundational data model underneath all
       future content: Profile, Case File, Investigation, Decision Record,
       Engineering Note, Timeline Record, Artifact — each defined by the

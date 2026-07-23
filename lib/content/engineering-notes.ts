@@ -1,4 +1,6 @@
 import type { EngineeringNote } from "@/lib/content/types";
+import { getInvestigationsForCaseFile } from "@/lib/content/investigations";
+import { getDecisionRecordsForCaseFile } from "@/lib/content/decision-records";
 
 export const engineeringNotes: EngineeringNote[] = [
   {
@@ -44,4 +46,29 @@ export const engineeringNotes: EngineeringNote[] = [
 
 export function getEngineeringNote(slug: string): EngineeringNote | undefined {
   return engineeringNotes.find((note) => note.slug === slug);
+}
+
+/**
+ * Notes that generalize either directly from this Case File, or from an
+ * Investigation/Decision Record that strengthens it. Kept as its own
+ * lookup rather than a field on Case File, so an Engineering Note stays
+ * an independent object that can be discovered through any of the paths
+ * that lead to it — not owned by whichever page happens to render it.
+ */
+export function getEngineeringNotesForCaseFile(caseFileSlug: string): EngineeringNote[] {
+  const investigationSlugs = new Set(
+    getInvestigationsForCaseFile(caseFileSlug).map((investigation) => investigation.slug),
+  );
+  const decisionRecordSlugs = new Set(
+    getDecisionRecordsForCaseFile(caseFileSlug).map((record) => record.slug),
+  );
+
+  return engineeringNotes.filter((note) => {
+    const source = note.generalizesFrom;
+    if (!source) return false;
+    if (source.type === "case-file") return source.slug === caseFileSlug;
+    if (source.type === "investigation") return investigationSlugs.has(source.slug);
+    if (source.type === "decision-record") return decisionRecordSlugs.has(source.slug);
+    return false;
+  });
 }

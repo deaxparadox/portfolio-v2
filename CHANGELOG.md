@@ -4,6 +4,17 @@
 
 ### Added
 
+- Evidence model prototype: `/projects/[slug]` renders a real Case File —
+  question, ownership/status badge, related Investigations and Decision
+  Records, outcome, generalized Engineering Notes, and verify links — for
+  the four anchor projects (HireIQ, BuildConnect USA, SellerPulse,
+  Vocalyst). Every other project slug still shows the honest placeholder;
+  migrating the rest was deliberately deferred until the model is proven.
+  Homepage rewritten around four visitor questions instead of a
+  site-navigation card grid, each linking straight to real evidence.
+  Removed `FeaturedWorkCard`/`AssistantCard`, now dead code since the
+  Assistant is reachable from anywhere via the floating trigger.
+
 - Portfolio evidence model: the foundational content model underneath all
   future homepage, search, and Deax work. Seven object types — Profile,
   Case File, Investigation, Decision Record, Engineering Note, Timeline

@@ -1,52 +1,35 @@
 import { profile } from "@/lib/content/profile";
-import { featuredProject, projects } from "@/lib/content/projects";
 import { RouteContainer } from "@/components/routes/route-container";
-import { FeaturedWorkCard } from "@/components/modules/featured-work-card";
 import { DashboardCard } from "@/components/modules/dashboard-card";
-import { AssistantCard } from "@/components/modules/assistant-card";
 
 export default function Home() {
   return (
     <RouteContainer>
-      <h1 className="text-2xl font-semibold tracking-tight">
-        {profile.name}
-      </h1>
-      <p className="mt-1 text-sm font-medium text-muted-foreground">
-        {profile.title}
-      </p>
+      <h1 className="text-2xl font-semibold tracking-tight">{profile.name}</h1>
+      <p className="mt-1 text-sm font-medium text-muted-foreground">{profile.title}</p>
       <p className="mt-4 text-sm text-muted-foreground">{profile.intro}</p>
 
-      <div className="mt-10">
-        {featuredProject && <FeaturedWorkCard project={featuredProject} />}
-      </div>
-
-      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <DashboardCard
-          title="Experience"
-          description="Excellence Technologies — Jan 2025–Present. Own production SaaS backends end to end: schema design, auth, background jobs, and the real-time AI systems layered on top."
-          href="/experience"
+          title="Can he solve difficult problems?"
+          description="Nine bugs were reported in a production voice AI, days before a client demo. There was only one root cause."
+          href="/projects/vocalyst"
         />
         <DashboardCard
-          title="Resume"
-          description="ATS and human-friendly versions, kept current."
-          href="/resume"
+          title="Can I trust his technical decisions?"
+          description="No backend API server. The browser talks to the database directly. The security model has to survive someone skipping the UI entirely."
+          href="/projects/buildconnect-usa"
         />
         <DashboardCard
-          title="Engineering"
-          description="How I think about hard problems: architecture decisions, production debugging, and the trade-offs behind both."
-          href="/engineering"
+          title="What has he actually built?"
+          description="A solo-built AI career platform — ~36,000 lines, two independently-tuned voice agents — honestly scoped: the employer module is still mid-development."
+          href="/projects/hireiq"
         />
         <DashboardCard
-          title="Projects"
-          description={`${projects.length} documented projects — voice AI, multi-agent systems, and full-stack SaaS.`}
-          href="/projects"
+          title="How does he think?"
+          description="The model never touches the numbers. It only explains them."
+          href="/projects/sellerpulse"
         />
-        <DashboardCard
-          title="Contact"
-          description="Let's talk about what you're building."
-          href="/contact"
-        />
-        <AssistantCard />
       </div>
     </RouteContainer>
   );
