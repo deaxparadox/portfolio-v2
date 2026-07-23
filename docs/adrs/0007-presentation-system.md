@@ -58,10 +58,26 @@ with more padding. Each is authored for the space it fills — a Small
 Investigation shows only its root cause, not eight truncated fields; a
 Focus Timeline uses its real responsibility bullets, not its 3-line
 Small form stretched into empty space. Additional variants (Medium,
-Preview, List Row, Search Result) will be added as consumers that
-actually need them are built — not authored speculatively ahead of a
-real requirement, per the same "smallest convincing set" discipline
-used throughout.
+Preview, Search Result) will be added as consumers that actually need
+them are built — not authored speculatively ahead of a real
+requirement, per the same "smallest convincing set" discipline used
+throughout. A List Row variant was briefly built for Project Browser's
+first version and then fully superseded by the coverflow (see below)
+before any other consumer adopted it — recorded here rather than
+silently dropped, per this project's own "Own Reality" discipline.
+
+### Coverflow is a consumer-level Browse layout, not a new object variant
+
+Project Browser's Case File drum reuses the same compact content a
+List Row would have shown (`displayName`, `question`,
+`CaseFileBadges`) — it does not introduce a new Case File presentation
+variant. What's new is the *consumer's* layout: many instances of the
+same compact rendering placed on a shared circular path and moved
+through via the Browse motion (above), rather than stacked in a list.
+This distinction matters going forward — a future consumer wanting
+"Browse" motion should reuse an existing compact variant inside a new
+layout, not invent a new per-object variant every time a consumer
+wants to move through peers physically.
 
 ### Focus Stage: fixed slots, promotion, not expansion
 
@@ -98,18 +114,28 @@ never what kind of thing it is), corrected from an earlier draft
 proposal that assigned one color per object type before this
 distinction was made explicit.
 
-### Motion has exactly two meanings
+### Motion has exactly three meanings
 
 **Depth** — revealing more of the same object (a Small form becoming a
 Focus form). **Navigation** — moving to a different view (a Case File
-link). Six type-specific motion metaphors (Investigation expands
-vertically because it "feels like digging deeper," Decision Record
-slides sideways because it "feels like comparing alternatives") were
-proposed and explicitly rejected: motion can legibly communicate state
-change and navigation direction, but nuanced directional metaphors
-don't reliably transmit to a visitor watching a panel move once,
-cold — that distinction is real, not something to relitigate per
-consumer.
+link). **Browse** (added when Project Browser's coverflow was
+designed) — moving one-at-a-time through a set of peer objects along a
+shared path, without revealing more of any single one or leaving the
+current view. Browse applies specifically to a consumer presenting
+many same-type objects where a visitor traverses them sequentially
+(Project Browser's Case File drum is the first use); it is not a
+license to reach for physical/spatial motion generally — Depth and
+Navigation remain the defaults for anything that isn't genuinely
+one-at-a-time traversal through peers.
+
+Six type-specific motion metaphors (Investigation expands vertically
+because it "feels like digging deeper," Decision Record slides
+sideways because it "feels like comparing alternatives") were proposed
+and explicitly rejected: motion can legibly communicate state change,
+navigation direction, and peer-to-peer traversal, but nuanced
+directional metaphors tied to *object type* don't reliably transmit to
+a visitor watching a panel move once, cold — that distinction is real,
+not something to relitigate per consumer.
 
 ### Every interaction is reachable by click or tap; hover is feedback only
 
@@ -132,12 +158,19 @@ hover equivalent, and this app has real, deliberate mobile support.
   state-based color once the GitHub/Linear/VS Code precedent was
   checked against literally, rather than assumed.
 - **Six type-specific motion metaphors** — reduced to two legible
-  meanings after checking whether directional metaphor actually
-  transmits to a cold viewer (it doesn't, reliably).
+  meanings (later three, with Browse) after checking whether
+  directional metaphor tied to object *type* actually transmits to a
+  cold viewer (it doesn't, reliably) — Browse is tied to a consumer
+  layout (peer traversal), not to any object type, so it doesn't
+  reopen this rejection.
 
 ## Consequences
 
-- Any new presentation variant (Medium, List Row, Search Result, etc.)
+- Browse-motion consumers must provide a non-gesture path through the
+  full set (click/tap on an index control, and a keyboard equivalent),
+  per the click-or-tap-reachable rule above — scroll/swipe alone is
+  never sufficient, since not every visitor has a wheel or trackpad.
+- Any new presentation variant (Medium, Search Result, etc.)
   must be authored for its own space, never derived by scaling an
   existing variant.
 - Any new consumer (Project Browser, Engineering Notebook, Timeline,

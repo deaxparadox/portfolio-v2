@@ -4,16 +4,27 @@
 
 ### Added
 
-- Project Browser: `/projects` now lists all 12 Case Files as a new
-  List Row presentation variant (`CaseFileListItem`) — displayName,
-  question, and the ownership/status/hasOpenRisk badges, linking to the
-  full Case File page. First consumer built after the Case File
-  migration, and the first presentation variant beyond Small/Focus.
-  Extracted the badge row out of `CaseFileView` into a shared
-  `CaseFileBadges` component rather than duplicating the label maps in
-  the new variant. No filter/search UI — deferred to the future Search
-  consumer.
-  See [docs/specs/0006-project-browser.md](docs/specs/0006-project-browser.md).
+- Project Browser: `/projects` now presents all 12 Case Files as a 3D
+  circular "drum" (`CaseFileDrum`) with a left numbered rail — browsed
+  via scroll, arrow keys, rail clicks, or touch swipe, curving outward
+  (convex) as a visitor moves through them. Extracted the badge row out
+  of `CaseFileView` into a shared `CaseFileBadges` component, reused by
+  the drum, rather than duplicating the label maps. No filter/search UI
+  — deferred to the future Search consumer.
+  Superseded a first version (`CaseFileListItem`, a flat List Row) that
+  shipped briefly before this redesign request — see
+  [docs/specs/0006-project-browser.md](docs/specs/0006-project-browser.md)
+  for that version and
+  [docs/specs/0007-project-browser-coverflow.md](docs/specs/0007-project-browser-coverflow.md)
+  for the coverflow that replaced it. Validated as a real interactive
+  artifact through several corrected iterations (circular placement,
+  correct convex card orientation, correct radius/spacing) before any
+  real code. Amended [ADR-0007](docs/adrs/0007-presentation-system.md)
+  to add "Browse" as a third motion meaning alongside Depth/Navigation.
+  Fixed a real bug found during implementation: React's
+  `onWheel`/`onTouchMove` are passive by default, silently breaking
+  `preventDefault()`; replaced with native, explicitly non-passive
+  listeners.
 
 - Remaining Case Files migration: Staffmind, StructureIQ, Founder's Lab,
   CourseForge, LexCall, InterviewPrep, Deskmind, and EcosystemAI moved

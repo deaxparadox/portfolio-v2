@@ -6,6 +6,44 @@
 
 ## Done
 
+- [x] **Project Browser: Coverflow redesign** — replaced the List Row
+      `/projects` view with a 3D circular "drum" of Case Files
+      (`CaseFileDrum`), plus a left numbered rail for direct jump-to
+      navigation. User-driven redesign request; validated as a real
+      interactive artifact first (four published iterations correcting:
+      flat coverflow → true circular placement → correct convex-outward
+      card facing (a rotation-sign bug) → correct radius/spacing to
+      eliminate card overlap) before any real code, per the project's
+      established pattern for interaction-model questions. Amended
+      ADR-0007 to add a third motion meaning ("Browse") alongside
+      Depth/Navigation, since this motion doesn't fit either existing
+      meaning. `CaseFileListItem` (List Row) fully removed — no
+      fallback, no toggle, replaced on every device.
+      Real bug found and fixed during implementation (not present in
+      the artifact, which never tested this): React attaches
+      `onWheel`/`onTouchMove` as passive listeners by default, so
+      `e.preventDefault()` inside the synthetic handler silently failed
+      instead of stopping the page/shell from scrolling underneath the
+      drum. Fixed by attaching native, explicitly non-passive
+      `wheel`/`touchmove` listeners via a ref + `useEffect` instead of
+      React's synthetic `onWheel`/`onTouch*` props.
+      Touch/swipe support (flagged as a known gap before implementation
+      started, since the artifact only validated desktop wheel/keyboard/
+      click) was built and verified via simulated touch events.
+      Spec: [docs/specs/0007-project-browser-coverflow.md](docs/specs/0007-project-browser-coverflow.md)
+      ADR: [0007-presentation-system](docs/adrs/0007-presentation-system.md) (amended)
+      Branch: `feat/case-files-migration`
+      Verified: `pnpm build`/`pnpm lint` clean; Playwright confirmed no
+      horizontal page overflow from the wide drum geometry, all 12 Case
+      Files present in the initial SSR HTML, rail-click/arrow-key/wheel/
+      touch-swipe all correctly advance the active card, the focus
+      card's link navigates to its real Case File page, reduced-motion
+      produces a near-instant focus change, and no console
+      errors/warnings (confirming the passive-listener fix actually
+      worked, not just silenced the symptom).
+
+## Done
+
 - [x] **Project Browser** — replaced the `/projects` placeholder with a
       real listing of all 12 Case Files, each rendered via a new List
       Row presentation variant (`CaseFileListItem`) — displayName,
