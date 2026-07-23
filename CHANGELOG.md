@@ -4,6 +4,23 @@
 
 ### Added
 
+- Portfolio evidence model: the foundational content model underneath all
+  future homepage, search, and Deax work. Seven object types — Profile,
+  Case File, Investigation, Decision Record, Engineering Note, Timeline
+  Record, Artifact — each defined by what engineering evidence it
+  provides and which of three principles (Understand/Engineer/Own
+  Reality) it reinforces, rather than by storage shape. Ownership,
+  status, and confidentiality (`displayName` only, never an internal
+  client identifier) are schema-enforced fields. Implemented with real
+  content for four anchor projects (HireIQ, BuildConnect USA,
+  SellerPulse, Vocalyst) sourced directly from the resume database:
+  4 Case Files, 2 Investigations, 4 Decision Records, 4 Engineering
+  Notes, 1 Timeline Record, all cross-referenced and validated for
+  referential integrity. Deliberately scoped to content only —
+  `lib/content/projects.ts` and the homepage are untouched; homepage
+  layout, navigation, and routing remain separate, later specs.
+  See [docs/adrs/0006-portfolio-evidence-model.md](docs/adrs/0006-portfolio-evidence-model.md).
+
 - Floating shell redesign (Milestone 4): restyled the shell from
   flush/bordered "OS-window-manager" chrome to a floating-widget visual
   language — Navigation, Workspace, and Companion Workspace each render

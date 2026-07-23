@@ -2,21 +2,33 @@
 
 ## In Progress
 
-- [ ] **Portfolio Evidence Model** — foundational data model underneath all
+(none)
+
+## Done
+
+- [x] **Portfolio Evidence Model** — foundational data model underneath all
       future content: Profile, Case File, Investigation, Decision Record,
       Engineering Note, Timeline Record, Artifact — each defined by the
       engineering evidence it provides and which of the three principles
       (Understand/Engineer/Own Reality) it reinforces, not by storage
       shape. Confidentiality (displayName-only), ownership, and status
-      are schema-enforced fields, not editorial reminders. Deliberately
-      does not decide homepage layout, navigation, or routes — those are
-      separate specs rendered as views over this model.
+      are schema-enforced fields, not editorial reminders.
+      Implemented `lib/content/types.ts` plus real content for the four
+      "smallest convincing set" anchors (HireIQ, BuildConnect USA,
+      SellerPulse, Vocalyst): 4 Case Files, 2 Investigations, 4 Decision
+      Records, 4 Engineering Notes, 1 Timeline Record — every fact
+      sourced from Master-Resume-Database.md, nothing invented. Deliberately
+      scoped to the content layer only: `lib/content/projects.ts` and the
+      Milestone 3 homepage are untouched, so there's intentional, temporary
+      duplication (e.g. HireIQ exists as both a lean project entry and a
+      rich Case File) until a later homepage/routes spec decides how to
+      consume this model.
       ADR: [0006-portfolio-evidence-model](docs/adrs/0006-portfolio-evidence-model.md)
-      Status: drafted, awaiting confirmation on one flagged deviation
-      (Decision/Lessons modeled as relationships rather than direct
-      Case File fields).
-
-## Done
+      Branch: `feat/evidence-model`
+      Verified: `pnpm build`/`pnpm lint` clean (typecheck passes on all
+      new types); a referential-integrity script confirmed every
+      `strengthens`/`generalizesFrom` reference points to a real object,
+      since nothing enforces that at the TypeScript level.
 
 - [x] **Floating Shell Redesign (Milestone 4)** — restyled the shell from
       flush/bordered "OS-window-manager" chrome to a floating-widget
