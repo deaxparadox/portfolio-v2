@@ -1,24 +1,11 @@
-import type { CaseFile, Ownership, CaseFileStatus } from "@/lib/content/types";
+import type { CaseFile } from "@/lib/content/types";
 import { getInvestigationsForCaseFile } from "@/lib/content/investigations";
 import { getDecisionRecordsForCaseFile } from "@/lib/content/decision-records";
 import { getEngineeringNotesForCaseFile } from "@/lib/content/engineering-notes";
 import { InvestigationView } from "@/components/modules/investigation-view";
 import { DecisionRecordView } from "@/components/modules/decision-record-view";
 import { EngineeringNoteView } from "@/components/modules/engineering-note-view";
-
-const OWNERSHIP_LABEL: Record<Ownership, string> = {
-  solo: "Solo build",
-  "core-contributor": "Core contributor",
-  rescue: "Rescue engagement",
-  inherited: "Inherited codebase",
-};
-
-const STATUS_LABEL: Record<CaseFileStatus, string> = {
-  active: "Active",
-  dormant: "Dormant",
-  closed: "Closed",
-  production: "In production",
-};
+import { CaseFileBadges } from "@/components/modules/case-file-badges";
 
 export function CaseFileView({ caseFile }: { caseFile: CaseFile }) {
   const investigations = getInvestigationsForCaseFile(caseFile.slug);
@@ -27,20 +14,7 @@ export function CaseFileView({ caseFile }: { caseFile: CaseFile }) {
 
   return (
     <div>
-      <div className="flex flex-wrap items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-        <span>{OWNERSHIP_LABEL[caseFile.ownership]}</span>
-        <span aria-hidden="true">·</span>
-        <span>{STATUS_LABEL[caseFile.status]}</span>
-        {caseFile.hasOpenRisk && (
-          <>
-            <span aria-hidden="true">·</span>
-            <span className="text-foreground">
-              <span aria-hidden="true">● </span>
-              Needs attention
-            </span>
-          </>
-        )}
-      </div>
+      <CaseFileBadges caseFile={caseFile} />
 
       <h1 className="mt-2 text-2xl font-semibold tracking-tight">{caseFile.displayName}</h1>
       <p className="mt-3 text-lg">{caseFile.question}</p>

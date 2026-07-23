@@ -6,6 +6,32 @@
 
 ## Done
 
+- [x] **Project Browser** — replaced the `/projects` placeholder with a
+      real listing of all 12 Case Files, each rendered via a new List
+      Row presentation variant (`CaseFileListItem`) — displayName,
+      question, and the ownership/status/hasOpenRisk badge row, linking
+      to the full Case File page. First real multi-object consumer of
+      the unified Knowledge Model after the previous migration, and the
+      first use of a presentation variant beyond Small/Focus (List Row —
+      anticipated in ADR-0007 but not built until a real consumer needed
+      it). Extracted the ownership/status badge row out of
+      `CaseFileView` into a shared `CaseFileBadges` component so the new
+      List Row variant doesn't duplicate the `OWNERSHIP_LABEL`/
+      `STATUS_LABEL` maps — exactly the kind of drift ADR-0007 was
+      written to prevent. Order is the array's existing declaration
+      order (4 anchors, then the 8 migrated projects) — no invented
+      sorting/filtering; that's Search's job later. Per the agreed
+      roadmap, pausing here to evaluate before Engineering
+      Notebook/Timeline/Resume.
+      Spec: [docs/specs/0006-project-browser.md](docs/specs/0006-project-browser.md)
+      Branch: `feat/case-files-migration`
+      Verified: `pnpm build`/`pnpm lint` clean; dev server check confirmed
+      all 12 Case Files render as list rows with correct, unique links
+      in the expected order, and `/projects/hireiq` renders identically
+      to before the badge extraction (no visual regression).
+
+## Done
+
 - [x] **Migrate remaining 8 projects to base Case File shape** — Staffmind,
       StructureIQ, Founder's Lab, CourseForge, LexCall, InterviewPrep,
       Deskmind, EcosystemAI migrated from the legacy `Project` shape in

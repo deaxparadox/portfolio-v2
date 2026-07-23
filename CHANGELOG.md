@@ -4,6 +4,17 @@
 
 ### Added
 
+- Project Browser: `/projects` now lists all 12 Case Files as a new
+  List Row presentation variant (`CaseFileListItem`) — displayName,
+  question, and the ownership/status/hasOpenRisk badges, linking to the
+  full Case File page. First consumer built after the Case File
+  migration, and the first presentation variant beyond Small/Focus.
+  Extracted the badge row out of `CaseFileView` into a shared
+  `CaseFileBadges` component rather than duplicating the label maps in
+  the new variant. No filter/search UI — deferred to the future Search
+  consumer.
+  See [docs/specs/0006-project-browser.md](docs/specs/0006-project-browser.md).
+
 - Remaining Case Files migration: Staffmind, StructureIQ, Founder's Lab,
   CourseForge, LexCall, InterviewPrep, Deskmind, and EcosystemAI moved
   from the legacy `Project` shape into base-shape `CaseFile` objects —
