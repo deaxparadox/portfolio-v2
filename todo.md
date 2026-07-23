@@ -2,7 +2,19 @@
 
 ## In Progress
 
-(none)
+- [ ] **Portfolio Evidence Model** — foundational data model underneath all
+      future content: Profile, Case File, Investigation, Decision Record,
+      Engineering Note, Timeline Record, Artifact — each defined by the
+      engineering evidence it provides and which of the three principles
+      (Understand/Engineer/Own Reality) it reinforces, not by storage
+      shape. Confidentiality (displayName-only), ownership, and status
+      are schema-enforced fields, not editorial reminders. Deliberately
+      does not decide homepage layout, navigation, or routes — those are
+      separate specs rendered as views over this model.
+      ADR: [0006-portfolio-evidence-model](docs/adrs/0006-portfolio-evidence-model.md)
+      Status: drafted, awaiting confirmation on one flagged deviation
+      (Decision/Lessons modeled as relationships rather than direct
+      Case File fields).
 
 ## Done
 
