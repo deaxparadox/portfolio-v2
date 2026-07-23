@@ -33,6 +33,10 @@ export type CaseFile = {
   context: string;
   ownership: Ownership;
   status: CaseFileStatus;
+  // A real, currently-unresolved item stated honestly (a missed deadline, an
+  // open workaround) — not "not finished yet," which `status` already covers.
+  // Backs the one state-based indicator that isn't already implied by status.
+  hasOpenRisk: boolean;
   outcome: string;
   principles: Principle[];
   artifacts: Artifact[];

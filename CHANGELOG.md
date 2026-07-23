@@ -4,6 +4,16 @@
 
 ### Added
 
+- Workspace homepage: replaced the equal-weight card grid with an
+  asymmetric, composition-first bento (`WorkbenchModule`) — a Hero
+  Investigation, medium Decision Record and Case File preview, and quiet
+  small Engineering Note and Timeline modules. Visual weight is a
+  hand-picked editorial choice independent of object type; interaction is
+  click/tap-only (hover never gates information); state comes from the
+  existing `status` field plus a new `hasOpenRisk` field on Case File,
+  communicated via weight and a small indicator rather than a new accent
+  color per object type.
+
 - Evidence model prototype: `/projects/[slug]` renders a real Case File —
   question, ownership/status badge, related Investigations and Decision
   Records, outcome, generalized Engineering Notes, and verify links — for

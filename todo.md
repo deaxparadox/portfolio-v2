@@ -6,6 +6,34 @@
 
 ## Done
 
+- [x] **Workspace Homepage** — replaced the equal-weight card grid with a
+      composition-first, asymmetric bento: a Hero Investigation (Vocalyst),
+      medium Decision Record (BuildConnect's no-API-server architecture) and
+      Case File preview (HireIQ), and quiet small Engineering Note
+      (SellerPulse) and Timeline (Excellence Technologies) modules. Visual
+      weight is hand-picked per module, independent of object type (a
+      `WorkbenchModule` size prop, not a type-to-size mapping) — type still
+      governs which rhythm renders, size is an editorial choice layered on
+      top. Interaction is click/tap-only collapsed↔expanded disclosure
+      (hover never gates information); state is communicated via existing
+      `status` plus a new `hasOpenRisk` field on Case File (weight + a
+      small dot indicator, not a new accent color) rather than one color
+      per object type. Timeline gets no expand affordance at all — not
+      every object needs the same interaction. Removed `DashboardCard` as
+      dead code once the homepage stopped using it.
+      This followed an extended design-exploration arc (persona journeys →
+      six themes → three principles → evidence model → several rounds of
+      reading-rhythm and composition prototyping, including two published
+      artifacts) — see `docs/adrs/0006-portfolio-evidence-model.md` and
+      `docs/context/07-engineering-principles.md` for the settled
+      philosophy this implements.
+      Branch: `feat/evidence-prototype`
+      Verified: `pnpm build`/`pnpm lint` clean; Playwright confirmed the
+      composition renders correctly at all three breakpoints, keyboard
+      (Enter) and click both expand a module, the Hero module's link
+      navigates to the real Case File, and reduced-motion is respected. No
+      console errors.
+
 - [x] **Evidence Model Prototype** — validates the evidence model as a real
       user-facing experience rather than just data. `/projects/[slug]` now
       renders a real Case File (question, ownership/status badge, context,

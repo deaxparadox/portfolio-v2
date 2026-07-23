@@ -31,6 +31,15 @@ export function CaseFileView({ caseFile }: { caseFile: CaseFile }) {
         <span>{OWNERSHIP_LABEL[caseFile.ownership]}</span>
         <span aria-hidden="true">·</span>
         <span>{STATUS_LABEL[caseFile.status]}</span>
+        {caseFile.hasOpenRisk && (
+          <>
+            <span aria-hidden="true">·</span>
+            <span className="text-foreground">
+              <span aria-hidden="true">● </span>
+              Needs attention
+            </span>
+          </>
+        )}
       </div>
 
       <h1 className="mt-2 text-2xl font-semibold tracking-tight">{caseFile.displayName}</h1>
