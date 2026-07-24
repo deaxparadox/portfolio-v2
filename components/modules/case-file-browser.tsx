@@ -255,11 +255,19 @@ export function CaseFileBrowser({ caseFiles }: { caseFiles: CaseFile[] }) {
                     isBack ? "" : "p-6 shadow-sm"
                   } ${isFocus ? "" : abs <= 2 ? "cursor-pointer" : ""}`}
                   style={{
+                    // No manual z-index: it would recompute and snap to its
+                    // target instantly on every state update, while the
+                    // transform below animates smoothly over 480ms — that
+                    // mismatch (stacking order jumping ahead of the still-
+                    // mid-flight visual position) is what read as flickering.
+                    // The parent's transform-style: preserve-3d lets the
+                    // browser depth-sort continuously from the real,
+                    // also-animating translateZ value instead.
                     transform: `translateX(${x}px) translateZ(${z}px) rotateY(${raw}deg) scale(${scale})`,
                     opacity,
                     filter: isFocus ? "none" : `brightness(${brightness})`,
-                    zIndex: Math.round(1000 * Math.cos(rad)),
                     pointerEvents: abs <= 2 ? "auto" : "none",
+                    willChange: "transform",
                   }}
                   onClick={isFocus || abs > 2 ? undefined : () => goTo(i)}
                 >

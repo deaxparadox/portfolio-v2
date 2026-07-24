@@ -6,6 +6,29 @@
 
 ## Done
 
+- [x] **Project Drum: fixed rotation flickering** — root-caused to a
+      manually-computed `zIndex` (`Math.round(1000 * Math.cos(rad))`)
+      recomputing and snapping to its *target* value instantly on every
+      React state update, while the `transform` (and therefore the
+      card's actual visual position) animated smoothly over 480ms —
+      stacking order jumped ahead of the still-mid-flight position for
+      the whole transition, which read as cards flickering in front of/
+      behind each other in the wrong order. Fixed by removing the
+      manual `zIndex` entirely and letting the parent's existing
+      `transform-style: preserve-3d` depth-sort cards continuously from
+      their real (also-animating) `translateZ` value instead — no
+      discrete jump, correct at every frame, not just at rest. Also
+      added `will-change: transform` since 12 elements animate 3D
+      transforms simultaneously.
+      Branch: `feat/case-files-migration`
+      Verified: `pnpm build`/`pnpm lint` clean; confirmed computed
+      `z-index` is `auto` on every card (no longer set); captured and
+      visually inspected multiple mid-transition frames (not just
+      before/after) confirming the focus card correctly stays on top of
+      its neighbors throughout the entire animation, not only once
+      settled; full rotation/wraparound Playwright suite re-passed
+      unchanged.
+
 - [x] **Project Browser: true infinite rotating drum** — replaced the
       windowed-arc geometry (only ±3 cards exist, index clamped 0-11,
       reverses at either end) with a genuine full-circle model: every

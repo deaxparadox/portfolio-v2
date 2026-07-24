@@ -53,10 +53,16 @@
   [ADR-0007](docs/adrs/0007-presentation-system.md) to add "Browse" as a
   third motion meaning alongside Depth/Navigation, and to record the
   sharpened mental model: a fixed Focus position with the object
-  rotating underneath it. Fixed a real bug found during
+  rotating underneath it. Fixed two real bugs found during
   implementation: React's `onWheel`/`onTouchMove` are passive by
-  default, silently breaking `preventDefault()`; replaced with native,
-  explicitly non-passive listeners.
+  default, silently breaking `preventDefault()` (replaced with native,
+  explicitly non-passive listeners); and a manually-computed `z-index`
+  snapped to its target instantly on every rotation while the card's
+  visual position was still animating, causing stacking order to
+  flicker ahead of where cards actually were mid-transition (fixed by
+  removing it and letting the existing `transform-style: preserve-3d`
+  depth-sort cards continuously from their real, also-animating
+  `translateZ` value).
 
 - Remaining Case Files migration: Staffmind, StructureIQ, Founder's Lab,
   CourseForge, LexCall, InterviewPrep, Deskmind, and EcosystemAI moved
