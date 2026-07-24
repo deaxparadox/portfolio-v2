@@ -79,6 +79,21 @@ This distinction matters going forward — a future consumer wanting
 layout, not invent a new per-object variant every time a consumer
 wants to move through peers physically.
 
+The drum's mental model is a fixed Focus position with the object
+rotating underneath it, not "the selected card changes" — every
+interaction (wheel, keyboard, swipe, rail) rotates the same physical
+object; nothing pages or rebuilds. Rotation is infinite (index wraps
+modulo the dataset's length, not clamped at either end) and the angle
+between items is always `360° / count`, derived from however many
+objects the consumer is given — the drum has no built-in assumption
+about how many Case Files exist. To read as one continuous object
+rather than a front-facing arc, every item exists somewhere on the
+circle at all times; items progressively simplify by *distance from
+Focus* (full → title-only → a non-interactive, textless silhouette)
+rather than disappearing past a visibility cutoff — the simplification
+levels are this consumer's own internal chrome, not new Case File
+presentation variants themselves.
+
 ### Focus Stage: fixed slots, promotion, not expansion
 
 Slots (Focus, Medium, Medium, Small, Small) never move or resize.

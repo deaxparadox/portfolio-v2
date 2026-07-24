@@ -5,15 +5,14 @@ import Link from "next/link";
 import type { CaseFile } from "@/lib/content/types";
 import { CaseFileBadges } from "@/components/modules/case-file-badges";
 
-// Validated geometry ratios (docs/specs/0007-project-browser-coverflow.md) —
-// kept constant as the drum scales; only absolute size changes, driven by
-// the stage's real measured width, not a fixed pixel constant.
-const REFERENCE_CARD_WIDTH = 260;
-const RADIUS_RATIO = 780 / REFERENCE_CARD_WIDTH;
-const HEIGHT_RATIO = 340 / REFERENCE_CARD_WIDTH;
-const PERSPECTIVE_RATIO = 1900 / REFERENCE_CARD_WIDTH;
-const ANGLE_PER_CARD = 26; // degrees — angular geometry, not physical size
-const MAX_VISIBLE = 3; // 3 * 26 = 78 degrees, safely under the 90-degree edge
+// Validated as a real interactive artifact first (docs/specs/0009-project-
+// drum-infinite-rotation.md) — every item always exists on a full circle
+// (infinite rotation, no clamped ends), the angle between adjacent items is
+// 360/N (derived from the dataset, not hardcoded), and radius is the exact
+// chord-length formula for near-tangent spacing at any N, not a tuned
+// constant valid only at today's count.
+const HEIGHT_RATIO = 340 / 260; // card aspect ratio, unrelated to N
+const PERSPECTIVE_TO_RADIUS_RATIO = 2.5; // tuned by eye against the artifact
 
 const CARD_WIDTH_FRACTION = 0.34; // fraction of the stage's measured width
 const MIN_CARD_WIDTH = 220;
@@ -22,10 +21,29 @@ const MAX_CARD_WIDTH = 420;
 const WHEEL_THRESHOLD = 40;
 const SWIPE_THRESHOLD = 50;
 
+function shortestDelta(from: number, to: number, n: number) {
+  let raw = (to - from) % n;
+  if (raw > n / 2) raw -= n;
+  if (raw <= -n / 2) raw += n;
+  return raw;
+}
+
 export function CaseFileBrowser({ caseFiles }: { caseFiles: CaseFile[] }) {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [cardWidth, setCardWidth] = useState(REFERENCE_CARD_WIDTH);
   const N = caseFiles.length;
+  const anglePerCard = 360 / N;
+
+  const [activeIndex, setActiveIndex] = useState(0);
+  // Each card's own continuously-accumulating rotation — never wrapped back
+  // into -180..180. A naive re-derivation of each card's angle fresh every
+  // render is guaranteed to glitch: the card exactly opposite Focus flips
+  // sign once per full rotation (e.g. +180 -> -150), and a CSS transition
+  // animating that raw number sweeps the long way around instead of the
+  // short way. Accumulating means every step is always a small, correctly-
+  // directioned change.
+  const [rotationOffsets, setRotationOffsets] = useState<number[]>(() =>
+    caseFiles.map((_, i) => shortestDelta(0, i, N) * anglePerCard),
+  );
+  const [cardWidth, setCardWidth] = useState(260);
 
   const stageRef = useRef<HTMLDivElement>(null);
   const wheelAccum = useRef(0);
@@ -33,12 +51,14 @@ export function CaseFileBrowser({ caseFiles }: { caseFiles: CaseFile[] }) {
   const touchStartX = useRef<number | null>(null);
   const touchDelta = useRef(0);
 
-  function step(direction: 1 | -1) {
-    setActiveIndex((prev) => Math.max(0, Math.min(N - 1, prev + direction)));
+  function rotateBy(delta: number) {
+    if (delta === 0) return;
+    setRotationOffsets((prev) => prev.map((v) => v - delta * anglePerCard));
+    setActiveIndex((prev) => ((prev + delta) % N + N) % N);
   }
 
   function goTo(index: number) {
-    setActiveIndex(Math.max(0, Math.min(N - 1, index)));
+    rotateBy(shortestDelta(activeIndex, index, N));
   }
 
   function prefersReducedMotion() {
@@ -68,8 +88,10 @@ export function CaseFileBrowser({ caseFiles }: { caseFiles: CaseFile[] }) {
   }, []);
 
   const cardHeight = cardWidth * HEIGHT_RATIO;
-  const radius = cardWidth * RADIUS_RATIO;
-  const perspective = cardWidth * PERSPECTIVE_RATIO;
+  // Exact chord-length formula for near-tangent spacing at any N, rather
+  // than a ratio only valid at today's count.
+  const radius = cardWidth / (2 * Math.sin(Math.PI / N));
+  const perspective = radius * PERSPECTIVE_TO_RADIUS_RATIO;
 
   // React attaches onWheel/onTouchMove as passive listeners by default, so
   // e.preventDefault() inside a synthetic handler silently fails instead of
@@ -84,7 +106,7 @@ export function CaseFileBrowser({ caseFiles }: { caseFiles: CaseFile[] }) {
       if (wheelLocked.current) return;
       wheelAccum.current += e.deltaY;
       if (Math.abs(wheelAccum.current) >= WHEEL_THRESHOLD) {
-        step(wheelAccum.current > 0 ? 1 : -1);
+        rotateBy(wheelAccum.current > 0 ? 1 : -1);
         wheelAccum.current = 0;
         wheelLocked.current = true;
         setTimeout(
@@ -109,7 +131,7 @@ export function CaseFileBrowser({ caseFiles }: { caseFiles: CaseFile[] }) {
 
     function handleTouchEnd() {
       if (Math.abs(touchDelta.current) >= SWIPE_THRESHOLD) {
-        step(touchDelta.current < 0 ? 1 : -1);
+        rotateBy(touchDelta.current < 0 ? 1 : -1);
       }
       touchStartX.current = null;
       touchDelta.current = 0;
@@ -132,11 +154,11 @@ export function CaseFileBrowser({ caseFiles }: { caseFiles: CaseFile[] }) {
   function handleKeyDown(e: React.KeyboardEvent) {
     if (e.key === "ArrowRight" || e.key === "ArrowDown") {
       e.preventDefault();
-      step(1);
+      rotateBy(1);
     }
     if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
       e.preventDefault();
-      step(-1);
+      rotateBy(-1);
     }
   }
 
@@ -156,10 +178,9 @@ export function CaseFileBrowser({ caseFiles }: { caseFiles: CaseFile[] }) {
         >
           <button
             type="button"
-            onClick={() => step(-1)}
-            disabled={activeIndex === 0}
-            aria-label="Previous case file"
-            className="mb-2 flex h-7 w-7 items-center justify-center rounded text-sm text-muted-foreground disabled:opacity-30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-foreground"
+            onClick={() => rotateBy(-1)}
+            aria-label="Rotate back"
+            className="mb-2 flex h-7 w-7 items-center justify-center rounded text-sm text-muted-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-foreground"
           >
             ▲
           </button>
@@ -183,10 +204,9 @@ export function CaseFileBrowser({ caseFiles }: { caseFiles: CaseFile[] }) {
 
           <button
             type="button"
-            onClick={() => step(1)}
-            disabled={activeIndex === N - 1}
-            aria-label="Next case file"
-            className="mt-2 flex h-7 w-7 items-center justify-center rounded text-sm text-muted-foreground disabled:opacity-30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-foreground"
+            onClick={() => rotateBy(1)}
+            aria-label="Rotate forward"
+            className="mt-2 flex h-7 w-7 items-center justify-center rounded text-sm text-muted-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-foreground"
           >
             ▼
           </button>
@@ -206,58 +226,69 @@ export function CaseFileBrowser({ caseFiles }: { caseFiles: CaseFile[] }) {
             style={{ width: cardWidth, height: cardHeight, transformStyle: "preserve-3d" }}
           >
             {caseFiles.map((caseFile, i) => {
-              const d = i - activeIndex;
-              const abs = Math.abs(d);
-              const isFocus = d === 0;
-              if (abs > MAX_VISIBLE) {
-                return (
-                  <div
-                    key={caseFile.slug}
-                    className="pointer-events-none absolute inset-0 opacity-0"
-                  />
-                );
-              }
+              // Two derived values from one source of truth (rotationOffsets[i]):
+              // the raw, ever-growing/shrinking value drives the CSS rotation
+              // itself (so transitions are always small and correctly
+              // directioned); the normalized value drives visual placement
+              // (position/scale/opacity all need the shortest-path angle,
+              // not the raw accumulated one).
+              const raw = rotationOffsets[i];
+              const normalized = ((raw % 360) + 360) % 360;
+              const thetaVisual = normalized > 180 ? normalized - 360 : normalized;
+              const distance = shortestDelta(activeIndex, i, N);
+              const abs = Math.abs(distance);
+              const isFocus = distance === 0;
+              const isBack = abs >= 3;
 
-              const theta = d * ANGLE_PER_CARD;
-              const rad = (theta * Math.PI) / 180;
+              const rad = (thetaVisual * Math.PI) / 180;
               const x = Math.sin(rad) * radius;
               const z = (Math.cos(rad) - 1) * radius;
-              const scale = Math.max(0.62, 1 - abs * 0.09);
-              const opacity = Math.max(0.2, 1 - abs * 0.2);
+              const t = Math.abs(thetaVisual) / 180; // 0 at Focus, 1 at the far side
+              const scale = Math.max(0.35, 1 - t * 0.75);
+              const opacity = Math.max(0.15, 1 - t * 0.95);
+              const brightness = 1 - t * 0.55;
 
               return (
                 <div
                   key={caseFile.slug}
-                  className={`absolute inset-0 flex flex-col rounded-2xl border border-border bg-background p-6 shadow-sm transition-[transform,opacity,filter] duration-[420ms] ease-out motion-reduce:transition-none ${
-                    isFocus ? "" : "cursor-pointer"
-                  }`}
+                  className={`absolute inset-0 flex flex-col rounded-2xl border border-border bg-background transition-[transform,opacity,filter] duration-[480ms] ease-out motion-reduce:transition-none ${
+                    isBack ? "" : "p-6 shadow-sm"
+                  } ${isFocus ? "" : abs <= 2 ? "cursor-pointer" : ""}`}
                   style={{
-                    transform: `translateX(${x}px) translateZ(${z}px) rotateY(${theta}deg) scale(${scale})`,
+                    transform: `translateX(${x}px) translateZ(${z}px) rotateY(${raw}deg) scale(${scale})`,
                     opacity,
-                    filter: isFocus ? "none" : `brightness(${1 - abs * 0.05})`,
-                    zIndex: 100 - abs,
-                    pointerEvents: "auto",
+                    filter: isFocus ? "none" : `brightness(${brightness})`,
+                    zIndex: Math.round(1000 * Math.cos(rad)),
+                    pointerEvents: abs <= 2 ? "auto" : "none",
                   }}
-                  onClick={isFocus ? undefined : () => goTo(i)}
+                  onClick={isFocus || abs > 2 ? undefined : () => goTo(i)}
                 >
-                  <span className="text-xs tabular-nums text-muted-foreground">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <p className="mt-2 text-lg font-semibold">{caseFile.displayName}</p>
-                  <p className="mt-2 line-clamp-5 text-sm text-muted-foreground">
-                    {caseFile.question}
-                  </p>
-                  <div className="mt-auto pt-4">
-                    <CaseFileBadges caseFile={caseFile} />
-                    {isFocus && (
-                      <Link
-                        href={`/projects/${caseFile.slug}`}
-                        className="mt-3 inline-block text-sm font-medium underline underline-offset-4 hover:text-muted-foreground"
-                      >
-                        View full Case File →
-                      </Link>
-                    )}
-                  </div>
+                  {!isBack && (
+                    <>
+                      {abs <= 1 && (
+                        <span className="text-xs tabular-nums text-muted-foreground">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                      )}
+                      <p className="mt-2 text-lg font-semibold">{caseFile.displayName}</p>
+                      {isFocus && (
+                        <>
+                          <p className="mt-2 line-clamp-5 text-sm text-muted-foreground">
+                            {caseFile.question}
+                          </p>
+                          <div className="mt-auto pt-4">
+                            <CaseFileBadges caseFile={caseFile} />
+                            <Link
+                              href={`/projects/${caseFile.slug}`}
+                              className="mt-3 inline-block text-sm font-medium underline underline-offset-4 hover:text-muted-foreground"
+                            >
+                              View full Case File →
+                            </Link>
+                          </div>
+                        </>
+                      )}
+                    </>
+                  )}
                 </div>
               );
             })}

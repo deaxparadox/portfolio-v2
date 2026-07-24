@@ -4,39 +4,59 @@
 
 ### Added
 
-- Project Browser: `/projects` now presents all 12 Case Files as a 3D
-  circular "drum" (`CaseFileBrowser`) inside a single navigation
-  workspace — a full-width title/counter header, a rail that's the sole
-  navigation instrument (numbered jump-to plus step chevrons above/
-  below), and a stage kept purely visual (cards only, no floating
-  controls). Reuses `PrimaryWorkspace`'s existing floating-container
-  frame rather than nesting a second border/rounded/shadow box. Card
-  size, radius, and perspective all derive from the stage's real
-  measured width (`ResizeObserver`) via one set of fixed ratios, instead
-  of independent fixed-pixel constants. Extracted the badge row out of
-  `CaseFileView` into a shared `CaseFileBadges` component, reused here,
-  rather than duplicating the label maps. No evidence preview inside
+- Project Browser: `/projects` now presents all 12 Case Files as a true
+  infinite-rotation "drum" (`CaseFileBrowser`) inside a single
+  navigation workspace — a full-width title/counter header, a rail
+  that's the sole navigation instrument (numbered jump-to plus step
+  chevrons above/below), and a stage kept purely visual (cards only, no
+  floating controls). Reuses `PrimaryWorkspace`'s existing
+  floating-container frame rather than nesting a second border/rounded/
+  shadow box.
+  Every Case File always exists somewhere on the circle — cards
+  progressively simplify by distance from the fixed Focus position
+  (full → title-only → a non-interactive, textless silhouette) instead
+  of disappearing past a visibility cutoff, so the drum reads as one
+  continuous object including its far side. Rotation is infinite (index
+  wraps modulo the dataset length, never reverses at either end), and
+  the angle between adjacent items is `360° / count`, derived from
+  however many Case Files exist rather than hardcoded. Radius uses the
+  exact chord-length formula for near-tangent spacing at any count. A
+  real technical risk — a naive implementation would glitch once per
+  full rotation, spinning the long way around whichever card sits
+  exactly opposite Focus — was identified and resolved by derivation
+  before writing any code: each card tracks its own
+  continuously-accumulating rotation value instead of a value re-wrapped
+  fresh every render.
+  Card size, radius, and perspective all derive from the stage's real
+  measured width (`ResizeObserver`), not fixed pixel constants.
+  Extracted the badge row out of `CaseFileView` into a shared
+  `CaseFileBadges` component, reused here. No evidence preview inside
   cards and no filter/search UI — the browser's job is choosing a
   project, not showcasing evidence (only 4 of 12 Case Files have deeper
   write-ups, and previewing that would expose implementation progress
   as if it were editorial significance); search is deferred to the
   future Search consumer.
-  Superseded two earlier versions in the same design arc: a flat List
+  Superseded three earlier versions in the same design arc: a flat List
   Row (`CaseFileListItem`, see
-  [docs/specs/0006-project-browser.md](docs/specs/0006-project-browser.md))
-  and a first coverflow (`CaseFileDrum`, see
+  [docs/specs/0006-project-browser.md](docs/specs/0006-project-browser.md)),
+  a windowed-arc coverflow (`CaseFileDrum`, see
   [docs/specs/0007-project-browser-coverflow.md](docs/specs/0007-project-browser-coverflow.md)),
-  refined into the workspace composition in
-  [docs/specs/0008-project-browser-workspace-frame.md](docs/specs/0008-project-browser-workspace-frame.md)
-  after an extended design-critique conversation. Validated as a real
-  interactive artifact through several corrected iterations (circular
-  placement, correct convex card orientation, correct radius/spacing)
-  before any real code. Amended
+  and a workspace-framed version of that same windowed arc (see
+  [docs/specs/0008-project-browser-workspace-frame.md](docs/specs/0008-project-browser-workspace-frame.md)),
+  refined into the true infinite drum in
+  [docs/specs/0009-project-drum-infinite-rotation.md](docs/specs/0009-project-drum-infinite-rotation.md)
+  after an extended design conversation. Validated as a real interactive
+  artifact through several corrected iterations at every stage
+  (circular placement, correct convex card orientation, correct
+  radius/spacing, and finally infinite wraparound with progressive
+  simplification) before any real code. Amended
   [ADR-0007](docs/adrs/0007-presentation-system.md) to add "Browse" as a
-  third motion meaning alongside Depth/Navigation. Fixed a real bug
-  found during implementation: React's `onWheel`/`onTouchMove` are
-  passive by default, silently breaking `preventDefault()`; replaced
-  with native, explicitly non-passive listeners.
+  third motion meaning alongside Depth/Navigation, and to record the
+  sharpened mental model: a fixed Focus position with the object
+  rotating underneath it. Fixed a real bug found during
+  implementation: React's `onWheel`/`onTouchMove` are passive by
+  default, silently breaking `preventDefault()`; replaced with native,
+  explicitly non-passive listeners.
 
 - Remaining Case Files migration: Staffmind, StructureIQ, Founder's Lab,
   CourseForge, LexCall, InterviewPrep, Deskmind, and EcosystemAI moved

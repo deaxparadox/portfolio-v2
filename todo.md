@@ -6,6 +6,55 @@
 
 ## Done
 
+- [x] **Project Browser: true infinite rotating drum** — replaced the
+      windowed-arc geometry (only ±3 cards exist, index clamped 0-11,
+      reverses at either end) with a genuine full-circle model: every
+      Case File always exists somewhere on the circle, index is modulo
+      the dataset length (infinite rotation, no reversal), and the
+      angle between adjacent items is `360° / count` — derived from
+      however many objects exist, not hardcoded to 12. Cards
+      progressively simplify by distance from the fixed Focus position
+      (full → title-only → non-interactive textless silhouette) instead
+      of disappearing past a visibility cutoff, so the drum always
+      reads as one continuous object, including its far side.
+      Validated as a real interactive artifact first (radius/spacing
+      tuned for near-tangent closeness, front/near/side/back tiering,
+      infinite wraparound) before any real code.
+      **Real technical risk identified and resolved via derivation, not
+      trial-and-error, before writing the artifact**: a naive
+      implementation recomputing each card's angle fresh every render
+      (wrapped to -180°..180°) is guaranteed to glitch — whichever card
+      sits exactly opposite Focus will, once per full rotation, flip
+      from +180° to -150° between renders, and a CSS transition
+      animating that raw number sweeps the long way around (330°)
+      instead of the short way (30°). Fixed by giving each card its own
+      continuously-accumulating rotation value (never wrapped, only
+      ever incremented by one step's worth), so the CSS transition is
+      always smooth and always the short way, while on-screen position
+      still normalizes that value for correct placement.
+      Amended [ADR-0007](docs/adrs/0007-presentation-system.md) to
+      record the sharpened mental model: a fixed Focus position with the
+      object rotating underneath it, not "the selected card changes."
+      Deliberately NOT extracting a generic, reusable "Drum" component
+      yet, despite the user's stated ambition for other knowledge
+      collections to eventually use one — per "smallest convincing set,"
+      that extraction happens when a second real consumer needs it, not
+      speculatively now.
+      Spec: [docs/specs/0009-project-drum-infinite-rotation.md](docs/specs/0009-project-drum-infinite-rotation.md)
+      Branch: `feat/case-files-migration`
+      Verified: `pnpm build`/`pnpm lint` clean; Playwright confirmed 12
+      forward steps return to 01/12 and stepping back from 01 lands on
+      12/12 (infinite rotation both directions), zero long-way-around
+      spins detected across 6 far rail jumps (the wrap-boundary fix
+      holds), back-tier cards are genuinely non-interactive
+      (`pointer-events: none`), and the full prior interaction suite
+      (rail click/chevrons, keyboard, wheel, touch swipe, focus-card
+      link navigation, responsive card sizing, reduced motion, no
+      horizontal overflow) still passes unchanged after the geometry
+      rewrite. No console errors.
+
+## Done
+
 - [x] **Project Browser: workspace frame & responsive composition** —
       reframed the coverflow from "a carousel component" into a
       dedicated navigation workspace, per an extended design-critique
