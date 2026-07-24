@@ -5,26 +5,38 @@
 ### Added
 
 - Project Browser: `/projects` now presents all 12 Case Files as a 3D
-  circular "drum" (`CaseFileDrum`) with a left numbered rail — browsed
-  via scroll, arrow keys, rail clicks, or touch swipe, curving outward
-  (convex) as a visitor moves through them. Extracted the badge row out
-  of `CaseFileView` into a shared `CaseFileBadges` component, reused by
-  the drum, rather than duplicating the label maps. No filter/search UI
-  — deferred to the future Search consumer.
-  Superseded a first version (`CaseFileListItem`, a flat List Row) that
-  shipped briefly before this redesign request — see
-  [docs/specs/0006-project-browser.md](docs/specs/0006-project-browser.md)
-  for that version and
-  [docs/specs/0007-project-browser-coverflow.md](docs/specs/0007-project-browser-coverflow.md)
-  for the coverflow that replaced it. Validated as a real interactive
-  artifact through several corrected iterations (circular placement,
-  correct convex card orientation, correct radius/spacing) before any
-  real code. Amended [ADR-0007](docs/adrs/0007-presentation-system.md)
-  to add "Browse" as a third motion meaning alongside Depth/Navigation.
-  Fixed a real bug found during implementation: React's
-  `onWheel`/`onTouchMove` are passive by default, silently breaking
-  `preventDefault()`; replaced with native, explicitly non-passive
-  listeners.
+  circular "drum" (`CaseFileBrowser`) inside a single navigation
+  workspace — a full-width title/counter header, a rail that's the sole
+  navigation instrument (numbered jump-to plus step chevrons above/
+  below), and a stage kept purely visual (cards only, no floating
+  controls). Reuses `PrimaryWorkspace`'s existing floating-container
+  frame rather than nesting a second border/rounded/shadow box. Card
+  size, radius, and perspective all derive from the stage's real
+  measured width (`ResizeObserver`) via one set of fixed ratios, instead
+  of independent fixed-pixel constants. Extracted the badge row out of
+  `CaseFileView` into a shared `CaseFileBadges` component, reused here,
+  rather than duplicating the label maps. No evidence preview inside
+  cards and no filter/search UI — the browser's job is choosing a
+  project, not showcasing evidence (only 4 of 12 Case Files have deeper
+  write-ups, and previewing that would expose implementation progress
+  as if it were editorial significance); search is deferred to the
+  future Search consumer.
+  Superseded two earlier versions in the same design arc: a flat List
+  Row (`CaseFileListItem`, see
+  [docs/specs/0006-project-browser.md](docs/specs/0006-project-browser.md))
+  and a first coverflow (`CaseFileDrum`, see
+  [docs/specs/0007-project-browser-coverflow.md](docs/specs/0007-project-browser-coverflow.md)),
+  refined into the workspace composition in
+  [docs/specs/0008-project-browser-workspace-frame.md](docs/specs/0008-project-browser-workspace-frame.md)
+  after an extended design-critique conversation. Validated as a real
+  interactive artifact through several corrected iterations (circular
+  placement, correct convex card orientation, correct radius/spacing)
+  before any real code. Amended
+  [ADR-0007](docs/adrs/0007-presentation-system.md) to add "Browse" as a
+  third motion meaning alongside Depth/Navigation. Fixed a real bug
+  found during implementation: React's `onWheel`/`onTouchMove` are
+  passive by default, silently breaking `preventDefault()`; replaced
+  with native, explicitly non-passive listeners.
 
 - Remaining Case Files migration: Staffmind, StructureIQ, Founder's Lab,
   CourseForge, LexCall, InterviewPrep, Deskmind, and EcosystemAI moved

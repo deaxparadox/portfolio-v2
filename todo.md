@@ -6,6 +6,50 @@
 
 ## Done
 
+- [x] **Project Browser: workspace frame & responsive composition** —
+      reframed the coverflow from "a carousel component" into a
+      dedicated navigation workspace, per an extended design-critique
+      conversation (composition, not carousel size, was the real
+      problem). `CaseFileDrum` renamed `CaseFileBrowser`. Removed the
+      four disconnected zones (title row, rail, stage, floating
+      controls) in favor of: a full-width title+counter header capping
+      the layout, a rail that absorbs step navigation (chevrons above/
+      below the numbered column) as the single navigation instrument,
+      and a stage that stays purely visual (cards only). Per an
+      explicit design decision mid-conversation, this reuses
+      `PrimaryWorkspace`'s existing floating-container frame rather than
+      adding a second nested border/rounded/shadow box — confirmed via
+      a direct before-implementation question rather than assumed.
+      Card size, radius, and perspective are now derived from the
+      stage's real measured width (`ResizeObserver`) via one set of
+      fixed ratios, instead of independent fixed-pixel constants tuned
+      against a single viewport.
+      Reversed from the previous round: no evidence preview inside
+      carousel cards — the browser's job is choosing, not showcasing,
+      and only 4 of 12 Case Files have deeper evidence, so previewing it
+      would expose implementation progress as editorial significance.
+      Explicitly deferred to a later pass (structure before polish): the
+      opacity-vs-brightness motion refinement, stronger shadow/weight
+      differentiation between focus and neighbor cards, and the rail's
+      active-entry-shows-name idea.
+      Spec: [docs/specs/0008-project-browser-workspace-frame.md](docs/specs/0008-project-browser-workspace-frame.md)
+      Branch: `feat/case-files-migration`
+      Verified: `pnpm build`/`pnpm lint` clean; Playwright confirmed the
+      rail's chevrons and numbered jump-to both work, all 12 Case Files
+      present in the DOM, wheel/keyboard/touch-swipe/reduced-motion/
+      focus-card-link-navigation all still correct after the
+      restructure, card width measurably scales down between a 1440px
+      and 900px stage (420px → 287px), and no horizontal page overflow.
+      One dev-mode-only false alarm during verification: a forced
+      Playwright click on the rail's "next" chevron appeared not to
+      register in `pnpm dev` — root-caused to Next.js's dev toolbar
+      (`<nextjs-portal>`) physically overlapping that corner in dev
+      builds only; a real (unforced) click against a production build
+      (`next build && next start`) confirmed the button works correctly
+      with no console errors — not an app bug.
+
+## Done
+
 - [x] **Project Browser: Coverflow redesign** — replaced the List Row
       `/projects` view with a 3D circular "drum" of Case Files
       (`CaseFileDrum`), plus a left numbered rail for direct jump-to
